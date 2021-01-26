@@ -1,8 +1,7 @@
-<script src="/Admin/plugins/table/datatable/datatables.js"></script>
-<script src="/Admin/plugins/table/datatable/button-ext/dataTables.buttons.min.js"></script>
-<script src="/Admin/plugins/table/datatable/button-ext/jszip.min.js"></script>
-<script src="/Admin/plugins/table/datatable/button-ext/buttons.html5.min.js"></script>
-<script src="/Admin/plugins/table/datatable/button-ext/buttons.print.min.js"></script>
+<script src="/Admin/assets/extra-libs/DataTables/datatables.min.js"></script>
+<script src="/Admin/dist/js/pages/datatable/datatable-basic.init.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
 
 @include('Admin.includes.scripts.FormsHelper')
 @include('Admin.includes.scripts.AlertHelper')

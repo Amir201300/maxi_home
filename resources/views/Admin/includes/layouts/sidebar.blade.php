@@ -33,7 +33,7 @@
                 </li>
                 <li class="nav-small-cap">
                     <i class="mdi mdi-dots-horizontal"></i>
-                    <span class="hide-menu">الروابط الرئيسة</span>
+                    <span class="hide-menu">الاعدادات الرئيسية</span>
                 </li>
 
                 <li class="sidebar-item">
@@ -45,9 +45,9 @@
 
 
                 <li class="sidebar-item">
-                    <a class="sidebar-link  waves-effect waves-dark" href="{{route('Category.index')}}" aria-expanded="false">
-                        <i class="fab  fa-product-hunt"></i>
-                        <span class="hide-menu">الاقسام</span>
+                    <a class="sidebar-link  waves-effect waves-dark" href="{{route('Store.index')}}" aria-expanded="false">
+                        <i class="icon-Clothing-Store"></i>
+                        <span class="hide-menu">الفروع</span>
                     </a>
                 </li>
 

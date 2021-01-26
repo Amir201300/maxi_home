@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Category;
+use App\Models\Store;
 use Yajra\DataTables\DataTables;
 use Auth, File;
 use Illuminate\Support\Facades\Storage;
 
 
-class CategoryController extends Controller
+class StoreController extends Controller
 {
     use \App\Traits\ApiResponseTrait;
 
@@ -21,7 +21,7 @@ class CategoryController extends Controller
      */
     public function allData()
     {
-        $data = Category::get();
+        $data = Store::get();
         return $this->mainFunction($data);
     }
 
@@ -30,7 +30,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return view('Admin.Category.index');
+        return view('Admin.Store.index');
     }
 
     /**
@@ -40,23 +40,12 @@ class CategoryController extends Controller
      */
     public function create(Request $request)
     {
-        $this->validate(
-            $request,
-            [
-                'img' => 'required|image|max:2000',
-            ],
-            [
-                'img.required' =>'من فضلك ادخل صورة القسم',
-                'img.image' =>'من فضلك ادخل صورة صالحة'
-            ]
-        );
-        $Category = new Category;
-        if($request->img)
-            $Category->icon = saveImage('Category',$request->img);
-        $Category->name_ar = $request->name_ar;
-        $Category->name_en = $request->name_en;
-        $Category->save();
-        return $this->apiResponseMessage(1,'تم اضافة القسم بنجاح',200);
+        $Store = new Store;
+        $Store->name = $request->name;
+        $Store->address = $request->address;
+        $Store->status = $request->status;
+        $Store->save();
+        return $this->apiResponseMessage(1,'تم اضافة الفرع بنجاح',200);
     }
 
     /**
@@ -65,8 +54,8 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $Category = Category::find($id);
-        return $Category;
+        $Store = Store::find($id);
+        return $Store;
     }
 
     /**
@@ -76,25 +65,12 @@ class CategoryController extends Controller
      */
     public function update(Request $request)
     {
-        $this->validate(
-            $request,
-            [
-                'img' => 'image|max:2000',
-            ],
-            [
-                'img.required' =>'من فضلك ادخل صورة القسم',
-                'img.image' =>'من فضلك ادخل صورة صالحة'
-            ]
-        );
-        $Category = Category::find($request->id);
-        if ($request->img) {
-            deleteFile('Category',$Category->icon);
-            $Category->icon=saveImage('Category',$request->img);
-        }
-        $Category->name_ar = $request->name_ar;
-        $Category->name_en = $request->name_en;
-        $Category->save();
-        return $this->apiResponseMessage(1,'تم تعديل القسم بنجاح',200);
+        $Store = Store::find($request->id);
+        $Store->name = $request->name;
+        $Store->address = $request->address;
+        $Store->status = $request->status;
+        $Store->save();
+        return $this->apiResponseMessage(1,'تم تعديل الفرع بنجاح',200);
     }
 
     /**
@@ -106,20 +82,32 @@ class CategoryController extends Controller
     {
         if ($request->type == 2) {
             $ids = explode(',', $id);
-            $Categories = Category::whereIn('id', $ids)->get();
+            $Categories = Store::whereIn('id', $ids)->get();
             foreach($Categories as $row){
-                deleteFile('Category',$row->icon);
+                deleteFile('Store',$row->icon);
                 $row->delete();
             }
         } else {
-            $Category = Category::find($id);
-            if (is_null($Category)) {
+            $Store = Store::find($id);
+            if (is_null($Store)) {
                 return 5;
             }
-            deleteFile('Category',$Category->icon);
-            $Category->delete();
+            deleteFile('Store',$Store->icon);
+            $Store->delete();
         }
         return response()->json(['errors' => false]);
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return int
+     */
+    public function ChangeStatus(Request $request,$id){
+        $store=Store::find($id);
+        $store->status=$request->status;
+        $store->save();
+        return 1;
     }
 
     /**
@@ -131,7 +119,6 @@ class CategoryController extends Controller
     {
         return Datatables::of($data)->addColumn('action', function ($data) {
             $options = '<td class="sorting_1"><button  class="btn btn-info waves-effect btn-circle waves-light" onclick="editFunction(' . $data->id . ')" type="button" ><i class="fa fa-spinner fa-spin" id="loadEdit_' . $data->id . '" style="display:none"></i><i class="fas fa-edit"></i></button>';
-            if($data->id !=1)
                 $options .= '<button type="button" onclick="deleteFunction(' . $data->id . ',1)" class="btn btn-danger waves-effect btn-circle waves-light"><i class=" fas fa-trash"></i> </button></td>';
             return $options;
         })->addColumn('checkBox', function ($data) {
@@ -140,10 +127,11 @@ class CategoryController extends Controller
                 '<input type="checkbox" class="mybox" id="checkBox_' . $data->id . '" onclick="check(' . $data->id . ')">' .
                 '</div></td>';
             return $checkBox;
-        })->editColumn('image', function ($data) {
-            $image = '<a href="'. getImageUrl('Category',$data->icon).'" target="_blank">'
-            .'<img  src="'. getImageUrl('Category',$data->icon) . '" width="50px" height="50px"></a>';
-            return $image;
-        })->rawColumns(['action' => 'action', 'image' => 'image','checkBox'=>'checkBox'])->make(true);
+        })->editColumn('status', function ($data) {
+            $status = '<button class="btn waves-effect waves-light btn-rounded btn-success statusBut" style="cursor:pointer !important" onclick="ChangeStatus(0,'.$data->id.')" title="اضغط هنا لالغاء التفعيل">مفعل</button>';
+            if ($data->status == 2)
+                $status = '<button class="btn waves-effect waves-light btn-rounded btn-danger statusBut" onclick="ChangeStatus(1,'.$data->id.')" style="cursor:pointer !important" title="اضغط هنا للتفعيل">غير مفعل</button>';
+            return $status;
+        })->rawColumns(['action' => 'action', 'status' => 'status','checkBox'=>'checkBox'])->make(true);
     }
 }

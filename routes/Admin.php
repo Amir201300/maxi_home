@@ -18,13 +18,14 @@ Route::prefix('Admin')->group(function () {
         });
 
         // Category Route
-        Route::prefix('Category')->group(function () {
-            Route::get('/index', 'CategoryController@index')->name('Category.index');
-            Route::get('/allData', 'CategoryController@allData')->name('Category.allData');
-            Route::post('/create', 'CategoryController@create')->name('Category.create');
-            Route::get('/edit/{id}', 'CategoryController@edit')->name('Category.edit');
-            Route::post('/update', 'CategoryController@update')->name('Category.update');
-            Route::get('/destroy/{id}', 'CategoryController@destroy')->name('Category.destroy');
+        Route::prefix('Store')->group(function () {
+            Route::get('/index', 'StoreController@index')->name('Store.index');
+            Route::get('/allData', 'StoreController@allData')->name('Store.allData');
+            Route::post('/create', 'StoreController@create')->name('Store.create');
+            Route::get('/edit/{id}', 'StoreController@edit')->name('Store.edit');
+            Route::post('/update', 'StoreController@update')->name('Store.update');
+            Route::get('/destroy/{id}', 'StoreController@destroy')->name('Store.destroy');
+            Route::get('/ChangeStatus/{id}', 'StoreController@ChangeStatus')->name('Store.ChangeStatus');
         });
 
 

@@ -8,7 +8,7 @@ $('#titleOfModel').text($('#titleOfText').text());
 
 $('#formSubmit')[0].reset();
 
-$('#exampleModal').modal();
+$('#formModel').modal();
 }
 </script>
 
@@ -58,4 +58,75 @@ $('#exampleModal').modal();
             }
         });
     }
+</script>
+
+
+{{-- custom Function to checkBox --}}
+<script>
+
+    var checkArray = [];
+
+    function check(id) {
+
+        if ($("#checkBox_" + id.toString() + "").is(":checked") == true) {
+
+            if (jQuery.inArray(id, checkArray) === -1 || checkArray.length === 0) {
+
+                checkArray.push(id);
+
+            }
+
+        } else {
+
+            checkArray.splice(checkArray.indexOf(id), 1);
+
+        }
+        console.log(checkArray);
+    }
+</script>
+
+{{-- custom Function to Delete --}}
+<script>
+    function deleteProccess(url) {
+
+        swal({
+
+
+            title: "هل انت متاكد ؟",
+
+
+            icon: "warning",
+
+
+            buttons: true,
+
+
+            dangerMode: true,
+
+        }).then((willDelete) => {
+            if (willDelete) {
+                Toset('الطلب قيد التتنفيد','info','يتم تنفيذ طلبك الان',false);
+                $.ajax({
+
+                    url: url,
+                    type: "get",
+                    success: function (data) {
+                        table.ajax.reload();
+                        var msg = data.message ? data.message : 'تم الحذف بنجاح';
+                        swal(msg, {
+                            icon: "success",
+                        });
+                        $.toast().reset('all');
+                    },
+                    error: function () {
+                        Toset('خطا','error','حدث خطا حاول مجددا',false);
+                    }
+                });
+
+            } else {
+                swal("لم تتم العملية!");
+            }
+        });
+    }
+
 </script>
