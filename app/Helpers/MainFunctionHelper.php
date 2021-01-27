@@ -15,3 +15,4 @@ function get_user_lang()
 {
     return Auth::user()->lang;
 }
+

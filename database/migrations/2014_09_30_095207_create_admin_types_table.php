@@ -16,7 +16,6 @@ class CreateAdminTypesTable extends Migration
         Schema::create('admin_types', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->text('notes');
             $table->tinyInteger('commission_status')->default(0)->nullable();
             $table->timestamps();
         });

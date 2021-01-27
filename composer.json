@@ -53,7 +53,8 @@
             "app/Helpers/imagesHelper.php",
             "app/Helpers/EmailsHelper.php",
             "app/Helpers/MainFunctionHelper.php",
-            "app/Helpers/AdminHelper.php"
+            "app/Helpers/AdminHelper.php",
+            "app/Helpers/InvoiceHelper.php"
         ]
     },
     "minimum-stability": "dev",
